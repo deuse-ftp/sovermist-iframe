@@ -91,11 +91,13 @@ function App() {
                 <iframe
                     frameBorder="0"
                     src="https://itch.io/embed-upload/14358869?color=333333"
-                    allowFullScreen
+                    allow="fullscreen; autoplay; encrypted-media; picture-in-picture"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-storage-access-by-user-activation allow-downloads"
                     width="1280"
                     height="740"
                     style={{ border: '1px solid #000', backgroundColor: '#fff' }}
                     onError={(e) => console.error('Erro no iframe:', e)}
+                    loading="eager" // Mude para eager para carregar imediato
                 >
                     <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
                 </iframe>
