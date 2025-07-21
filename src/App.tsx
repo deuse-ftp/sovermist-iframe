@@ -11,15 +11,16 @@ function App() {
     const [networkError, setNetworkError] = useState<string | null>(null);
     const [isChainAdded, setIsChainAdded] = useState(true);
 
-    // Força fundo branco na tela toda (remove cinza)
+    // Força fundo preto na tela toda
     useEffect(() => {
-        document.body.style.backgroundColor = '#fff'; // Aplica branco no body
-        document.body.style.margin = '0'; // Remove margens padrões
+        document.body.style.backgroundColor = '#000 !important'; // Fundo preto
+        document.body.style.margin = '0';
         document.body.style.padding = '0';
+        document.body.style.width = '100%';
+        document.body.style.height = '100vh';
         document.body.style.display = 'flex';
         document.body.style.justifyContent = 'center';
         document.body.style.alignItems = 'center';
-        document.body.style.minHeight = '100vh';
     }, []);
 
     const addNetwork = async () => {
@@ -61,29 +62,28 @@ function App() {
         <div style={{
             textAlign: 'center',
             padding: '20px',
-            backgroundColor: '#fff',
+            backgroundColor: '#000', // Fundo preto
             minHeight: '100vh',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%', // Força largura completa sem divisões
-            maxWidth: '1280px', // Limita a largura para centralizar
-            margin: '0 auto' // Centraliza o div inteiro
+            width: '100%',
+            overflow: 'hidden'
         }}>
-            <h1>Sovermist - Login Web3</h1>
+            <h1 style={{ fontSize: '14px', color: '#fff' }}>Sovermist - Login Web3</h1> {/* Tamanho reduzido para 24px */}
 
-            {isConnecting && <p>Conectando...</p>}
+            {isConnecting && <p style={{ color: '#fff' }}>Conectando...</p>}
             {!isConnected && !isConnecting && (
                 <div style={{ marginBottom: '20px' }}>
-                    <p>Conecte uma carteira à Monad Testnet:</p>
+                    <p style={{ color: '#fff' }}>Conecte uma carteira à Monad Testnet:</p>
                     <appkit-button />
                     {networkError && <p style={{ color: 'red' }}>Erro: {networkError}</p>}
                 </div>
             )}
             {isConnected && (
                 <div style={{ marginBottom: '20px' }}>
-                    <p>Conectado como: {address}</p>
+                    <p style={{ color: '#fff' }}>Conectado como: {address}</p>
                     <button onClick={() => disconnect()} style={{ padding: '10px' }}>Desconectar</button>
                     {networkError && (
                         <div>
@@ -103,9 +103,9 @@ function App() {
                     frameBorder="0"
                     src="https://itch.io/embed-upload/14358869?color=333333"
                     allowFullScreen
-                    width="100%" // Largura 100% do container para preencher sem divisões
+                    width="1280"
                     height="740"
-                    style={{ border: '1px solid #000', backgroundColor: '#fff', maxWidth: '1280px' }} // Limita e centraliza o iframe
+                    style={{ border: '1px solid #000', backgroundColor: '#000' }} // Fundo preto no iframe
                     onError={(e) => console.error('Erro no iframe:', e)}
                 >
                     <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
