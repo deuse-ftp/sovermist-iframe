@@ -16,13 +16,13 @@ export const monadTestnet = {
     testnet: true,
 };
 
-// Crie o adaptador Wagmi sem Coinbase
+// Crie o adaptador Wagmi
 const wagmiAdapter = new WagmiAdapter({
     networks: [monadTestnet],
     projectId: '81bbd6d3324b1f34b5e1d6002aececc0',
 });
 
-// Crie o AppKit com analytics desativado
+// Crie o AppKit com metadata.url corrigida para Vercel
 createAppKit({
     adapters: [wagmiAdapter],
     networks: [monadTestnet],
@@ -30,11 +30,11 @@ createAppKit({
     metadata: {
         name: 'Sovermist',
         description: 'Jogo Web3 com Monad Testnet',
-        url: 'https://deuseftp.itch.io/sovermist',
+        url: 'https://sovermist-iframe-ra2xyxhp8-deuses-projects-4f000c64.vercel.app', // Mude para a URL real do seu Vercel
         icons: ['https://avatars.githubusercontent.com/u/179229932'],
     },
     features: {
-        analytics: false, // Desativa métricas para evitar chamadas 401 da Coinbase
+        analytics: false, // Desativa para evitar 401 do Coinbase
     },
     themeMode: 'dark',
 });
