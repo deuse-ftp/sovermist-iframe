@@ -7,15 +7,15 @@ function App() {
     const { disconnect } = useDisconnect();
     const { switchChainAsync } = useSwitchChain();
     const { data: walletClient } = useWalletClient();
-    const chainId = useChainId(); // Hook para checar a rede atual
+    const chainId = useChainId();
     const [networkError, setNetworkError] = useState<string | null>(null);
-    const [isChainAdded, setIsChainAdded] = useState(true); // Estado para rastrear se a rede está adicionada
+    const [isChainAdded, setIsChainAdded] = useState(true);
+    const [gameLoaded, setGameLoaded] = useState(false); // Estado para controlar o botão e iframe
 
-    // Checa a rede após conexão
     useEffect(() => {
         if (isConnected && chainId !== monadTestnet.id) {
             setNetworkError('Rede errada. Por favor, troque para Monad Testnet.');
-            setIsChainAdded(false); // Assume que não está adicionada se chainId errado
+            setIsChainAdded(false);
         } else if (isConnected) {
             setNetworkError(null);
             setIsChainAdded(true);
@@ -37,7 +37,6 @@ function App() {
                 });
                 setNetworkError(null);
                 setIsChainAdded(true);
-                // Tenta trocar após adicionar
                 if (switchChainAsync) {
                     switchChainAsync({ chainId: monadTestnet.id }).catch((err: unknown) => {
                         if (err instanceof Error) {
@@ -56,6 +55,10 @@ function App() {
                 }
             }
         }
+    };
+
+    const startGame = () => {
+        setGameLoaded(true); // Ativa o iframe ao clicar
     };
 
     return (
@@ -84,10 +87,15 @@ function App() {
                             )}
                         </div>
                     )}
+                    {!gameLoaded && !networkError && (
+                        <button onClick={startGame} style={{ padding: '20px', marginTop: '20px', fontSize: '18px' }}>
+                            Iniciar Jogo
+                        </button>
+                    )}
                 </div>
             )}
 
-            {isConnected && !networkError && (
+            {isConnected && gameLoaded && !networkError && (
                 <iframe
                     frameBorder="0"
                     src="https://itch.io/embed-upload/14358869?color=333333"
@@ -97,7 +105,7 @@ function App() {
                     height="740"
                     style={{ border: '1px solid #000', backgroundColor: '#fff' }}
                     onError={(e) => console.error('Erro no iframe:', e)}
-                    loading="eager" // Mude para eager para carregar imediato
+                    loading="lazy"
                 >
                     <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
                 </iframe>
