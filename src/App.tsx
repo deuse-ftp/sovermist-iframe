@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAccount, useDisconnect, useSwitchChain, useWalletClient, useChainId } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { monadTestnet } from './config';
