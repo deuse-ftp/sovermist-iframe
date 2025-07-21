@@ -1,13 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovermist</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #333333; /* Cor de fundo igual ao ?color=333333 do iframe */
+        }
+        iframe {
+            border: 0;
+            width: 1280px;
+            height: 740px;
+        }
+        /* Responsividade para telas menores */
+        @media (max-width: 1280px) {
+            iframe {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 1280 / 740; /* Mantém a proporção do jogo */
+            }
+        }
+    </style>
+</head>
+<body>
+    <iframe frameborder="0" src="https://itch.io/embed-upload/14358869?color=333333" allowfullscreen="" width="1280" height="740"><a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a></iframe>
+</body>
 </html>
