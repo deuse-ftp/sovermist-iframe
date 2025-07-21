@@ -6,13 +6,16 @@
         "module": "ESNext",
         "skipLibCheck": true,
 
+        /* Bundler mode */
         "moduleResolution": "bundler",
         "verbatimModuleSyntax": true,
         "moduleDetection": "force",
-        "noEmit": true, // Mantém true para compatibilidade
+        "noEmit": false, // Garantido como false para resolver TS6310
 
-        "composite": true, // Adiciona para modo referenciado
+        /* Composite mode */
+        "composite": true, // Necessário para referências
 
+        /* Linting */
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
