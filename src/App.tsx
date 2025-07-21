@@ -7,21 +7,22 @@ function App() {
     const { disconnect } = useDisconnect();
     const { switchChainAsync } = useSwitchChain();
     const { data: walletClient } = useWalletClient();
-    const chainId = useChainId(); // Hook para checar a rede atual
+    const chainId = useChainId(); // Mantido com uso explícito
     const [networkError, setNetworkError] = useState<string | null>(null);
-    const [isChainAdded, setIsChainAdded] = useState(true); // Estado para rastrear se a rede está adicionada
+    const [isChainAdded, setIsChainAdded] = useState(true);
 
-    // Checa a rede após conexão
+    // Força fundo preto na tela toda
     useEffect(() => {
-        if (isConnected && chainId !== monadTestnet.id) {
-            setNetworkError('Rede errada. Por favor, troque para Monad Testnet.');
-            setIsChainAdded(false); // Assume que não está adicionada se chainId errado
-        } else if (isConnected) {
-            setNetworkError(null);
-            setIsChainAdded(true);
-        }
-        console.log('Chain ID atual:', chainId); // Uso explícito de chainId para resolver TS6133 (pode remover depois)
-    }, [isConnected, chainId]);
+        document.body.style.backgroundColor = '#000 !important';
+        document.body.style.margin = '0';
+        document.body.style.padding = '0';
+        document.body.style.width = '100%';
+        document.body.style.height = '100vh';
+        document.body.style.display = 'flex';
+        document.body.style.justifyContent = 'center';
+        document.body.style.alignItems = 'center';
+        console.log('Chain ID atual:', chainId); // Usa chainId para resolver TS6133
+    }, [chainId]); // Adiciona chainId como dependência para uso
 
     const addNetwork = async () => {
         if (walletClient) {
@@ -38,7 +39,6 @@ function App() {
                 });
                 setNetworkError(null);
                 setIsChainAdded(true);
-                // Tenta trocar após adicionar
                 if (switchChainAsync) {
                     switchChainAsync({ chainId: monadTestnet.id }).catch((err: unknown) => {
                         if (err instanceof Error) {
@@ -60,20 +60,32 @@ function App() {
     };
 
     return (
-        <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#fff', minHeight: '100vh' }}>
-            <h1>Sovermist - Login Web3</h1>
+        <div style={{
+            textAlign: 'center',
+            padding: '20px',
+            backgroundColor: '#000',
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            minWidth: '1280px', // Garante largura mínima
+            overflow: 'hidden'
+        }}>
+            <h1 style={{ fontSize: '24px', color: '#fff' }}>Sovermist - Login Web3</h1>
 
-            {isConnecting && <p>Conectando...</p>}
+            {isConnecting && <p style={{ color: '#fff' }}>Conectando...</p>}
             {!isConnected && !isConnecting && (
-                <div>
-                    <p>Conecte uma carteira à Monad Testnet:</p>
+                <div style={{ marginBottom: '20px' }}>
+                    <p style={{ color: '#fff' }}>Conecte uma carteira à Monad Testnet:</p>
                     <appkit-button />
                     {networkError && <p style={{ color: 'red' }}>Erro: {networkError}</p>}
                 </div>
             )}
             {isConnected && (
-                <div>
-                    <p>Conectado como: {address}</p>
+                <div style={{ marginBottom: '20px' }}>
+                    <p style={{ color: '#fff' }}>Conectado como: {address}</p>
                     <button onClick={() => disconnect()} style={{ padding: '10px' }}>Desconectar</button>
                     {networkError && (
                         <div>
@@ -95,7 +107,7 @@ function App() {
                     allowFullScreen
                     width="1280"
                     height="740"
-                    style={{ border: '1px solid #000', backgroundColor: '#fff' }}
+                    style={{ border: '1px solid #000', backgroundColor: '#000' }}
                     onError={(e) => console.error('Erro no iframe:', e)}
                 >
                     <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
