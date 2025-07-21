@@ -22,7 +22,7 @@ function App() {
         document.body.style.justifyContent = 'center';
         document.body.style.alignItems = 'center';
         console.log('Chain ID atual:', chainId); // Usa chainId para resolver TS6133
-    }, [chainId]); // Adiciona chainId como dependência para uso
+    }, [chainId]);
 
     const addNetwork = async () => {
         if (walletClient) {
@@ -70,11 +70,9 @@ function App() {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100%',
-            minWidth: '1280px', // Garante largura mínima
+            minWidth: '1280px',
             overflow: 'hidden'
         }}>
-            <h1 style={{ fontSize: '24px', color: '#fff' }}>Sovermist - Login Web3</h1>
-
             {isConnecting && <p style={{ color: '#fff' }}>Conectando...</p>}
             {!isConnected && !isConnecting && (
                 <div style={{ marginBottom: '20px' }}>
