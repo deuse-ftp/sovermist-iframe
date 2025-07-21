@@ -1,0 +1,22 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)\\.gz",
+      "headers": [
+        { "key": "Content-Encoding", "value": "gzip" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.br",
+      "headers": [
+        { "key": "Content-Encoding", "value": "br" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Content-Security-Policy", "value": "frame-src 'self' https://itch.io; script-src 'self' 'unsafe-inline' https://*.itch.io;" }
+      ]
+    }
+  ]
+}
