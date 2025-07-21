@@ -6,17 +6,21 @@
         "module": "ESNext",
         "skipLibCheck": true,
 
+        /* Bundler mode */
         "moduleResolution": "bundler",
         "allowImportingTsExtensions": true,
         "isolatedModules": true,
         "moduleDetection": "force",
         "noEmit": true,
+        "jsx": "react-jsx", // Corrige o erro TS17004 e TS6142, permitindo JSX
 
+        /* Linting */
         "strict": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
 
+        /* Adicionais para compatibilidade */
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
