@@ -1,7 +1,7 @@
 {
     "headers": [
         {
-            "source": "/(.*)\\.br",
+            "source": "/(.)\\.br",
             "headers": [
                 {
                     "key": "Content-Encoding",
@@ -10,19 +10,11 @@
             ]
         },
         {
-            "source": "/(.*)",
+            "source": "/(.)",
             "headers": [
                 {
                     "key": "Content-Security-Policy",
-                    "value": "frame-src 'self' https://itch.io https://*.itch.io; script-src 'self' 'unsafe-inline' https://*.itch.io https://*.walletconnect.org; worker-src 'self' blob:; connect-src 'self' https://*.itch.io https://*.walletconnect.org wss://*.walletconnect.org https://pulse.walletconnect.org https://api.itch.io; object-src 'self' https://*.itch.io;"
-                },
-                {
-                    "key": "Cross-Origin-Opener-Policy",
-                    "value": "same-origin"
-                },
-                {
-                    "key": "Cross-Origin-Embedder-Policy",
-                    "value": "require-corp"
+                    "value": "frame-src 'self' https://itch.io https://.itch.io; script-src 'self' 'unsafe-inline' https://.itch.io; worker-src 'self' blob:; connect-src 'self' https://.itch.io wss://.itch.io;"
                 }
             ]
         }

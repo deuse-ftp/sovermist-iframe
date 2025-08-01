@@ -1,27 +1,26 @@
 import { useAccount, useDisconnect, useSwitchChain, useWalletClient, useChainId } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { monadTestnet } from './config';
-
 function App() {
     const { address, isConnected, isConnecting } = useAccount();
     const { disconnect } = useDisconnect();
     const { switchChainAsync } = useSwitchChain();
     const { data: walletClient } = useWalletClient();
-    const chainId = useChainId();
+    const chainId = useChainId(); // Mantido com uso explícito
     const [networkError, setNetworkError] = useState<string | null>(null);
     const [isChainAdded, setIsChainAdded] = useState(true);
-
+    // Força fundo preto na tela toda
     useEffect(() => {
-        if (isConnected && chainId !== monadTestnet.id) {
-            setNetworkError('Rede errada. Por favor, troque para Monad Testnet.');
-            setIsChainAdded(false);
-        } else if (isConnected) {
-            setNetworkError(null);
-            setIsChainAdded(true);
-        }
-        console.log('Chain ID atual:', chainId);
-    }, [isConnected, chainId]);
-
+        document.body.style.backgroundColor = '#000 !important';
+        document.body.style.margin = '0';
+        document.body.style.padding = '0';
+        document.body.style.width = '100%';
+        document.body.style.height = '100vh';
+        document.body.style.display = 'flex';
+        document.body.style.justifyContent = 'center';
+        document.body.style.alignItems = 'center';
+        console.log('Chain ID atual:', chainId); // Usa chainId para resolver TS6133
+    }, [chainId]);
     const addNetwork = async () => {
         if (walletClient) {
             try {
@@ -56,7 +55,6 @@ function App() {
             }
         }
     };
-
     return (
         <div style={{
             textAlign: 'center',
@@ -95,18 +93,15 @@ function App() {
                     )}
                 </div>
             )}
-
             {isConnected && !networkError && (
                 <iframe
                     frameBorder="0"
                     src="https://itch.io/embed-upload/14489424?color=333333"
-                    allow="camera; microphone; display-capture; fullscreen; autoplay; encrypted-media; picture-in-picture"
-                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-storage-access-by-user-activation allow-downloads"
+                    allowFullScreen
                     width="1280"
                     height="740"
-                    style={{ border: '1px solid #000', backgroundColor: '#000', maxWidth: '100%' }}
+                    style={{ border: '1px solid #000', backgroundColor: '#000' }}
                     onError={(e) => console.error('Erro no iframe:', e)}
-                    loading="eager"
                 >
                     <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
                 </iframe>
@@ -114,5 +109,4 @@ function App() {
         </div>
     );
 }
-
 export default App;
