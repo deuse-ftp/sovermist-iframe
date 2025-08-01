@@ -11,7 +11,7 @@ function App() {
     const [networkError, setNetworkError] = useState<string | null>(null);
     const [isChainAdded, setIsChainAdded] = useState(true);
 
-    // Força fundo preto na tela toda
+    // Força fundo preto na tela toda e usa chainId
     useEffect(() => {
         document.body.style.backgroundColor = '#000 !important';
         document.body.style.margin = '0';
@@ -101,12 +101,14 @@ function App() {
             {isConnected && !networkError && (
                 <iframe
                     frameBorder="0"
-                    src="https://itch.io/embed-upload/14489424?color=333333"
-                    allowFullScreen
+                    src="https://itch.io/embed-upload/14489424?color=333333" // Mantém o novo ID
+                    allow="camera; microphone; display-capture; fullscreen; autoplay; encrypted-media; picture-in-picture" // Suporte para SharedArrayBuffer
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-storage-access-by-user-activation allow-downloads" // Permite WASM e performance
                     width="1280"
                     height="740"
-                    style={{ border: '1px solid #000', backgroundColor: '#000' }}
+                    style={{ border: '1px solid #000', backgroundColor: '#000', maxWidth: '100%' }} // Garante que ocupe a largura disponível
                     onError={(e) => console.error('Erro no iframe:', e)}
+                    loading="eager" // Força carregamento imediato após conexão
                 >
                     <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
                 </iframe>
