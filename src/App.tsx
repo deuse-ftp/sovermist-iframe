@@ -101,7 +101,7 @@ function App() {
             {isConnected && !networkError && (
                 <iframe
                     frameBorder="0"
-                    src="https://itch.io/embed-upload/14456193?color=333333"
+                    src="https://itch.io/embed-upload/14478664?color=333333"
                     allowFullScreen
                     width="1280"
                     height="740"
