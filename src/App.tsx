@@ -7,22 +7,20 @@ function App() {
     const { disconnect } = useDisconnect();
     const { switchChainAsync } = useSwitchChain();
     const { data: walletClient } = useWalletClient();
-    const chainId = useChainId(); // Mantido com uso explícito
+    const chainId = useChainId();
     const [networkError, setNetworkError] = useState<string | null>(null);
     const [isChainAdded, setIsChainAdded] = useState(true);
 
-    // Força fundo preto na tela toda e usa chainId
     useEffect(() => {
-        document.body.style.backgroundColor = '#000 !important';
-        document.body.style.margin = '0';
-        document.body.style.padding = '0';
-        document.body.style.width = '100%';
-        document.body.style.height = '100vh';
-        document.body.style.display = 'flex';
-        document.body.style.justifyContent = 'center';
-        document.body.style.alignItems = 'center';
-        console.log('Chain ID atual:', chainId); // Usa chainId para resolver TS6133
-    }, [chainId]);
+        if (isConnected && chainId !== monadTestnet.id) {
+            setNetworkError('Rede errada. Por favor, troque para Monad Testnet.');
+            setIsChainAdded(false);
+        } else if (isConnected) {
+            setNetworkError(null);
+            setIsChainAdded(true);
+        }
+        console.log('Chain ID atual:', chainId);
+    }, [isConnected, chainId]);
 
     const addNetwork = async () => {
         if (walletClient) {
@@ -101,14 +99,14 @@ function App() {
             {isConnected && !networkError && (
                 <iframe
                     frameBorder="0"
-                    src="https://itch.io/embed-upload/14489424?color=333333" // Mantém o novo ID
-                    allow="camera; microphone; display-capture; fullscreen; autoplay; encrypted-media; picture-in-picture" // Suporte para SharedArrayBuffer
-                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-storage-access-by-user-activation allow-downloads" // Permite WASM e performance
+                    src="https://itch.io/embed-upload/14489424?color=333333"
+                    allow="camera; microphone; display-capture; fullscreen; autoplay; encrypted-media; picture-in-picture"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-storage-access-by-user-activation allow-downloads"
                     width="1280"
                     height="740"
-                    style={{ border: '1px solid #000', backgroundColor: '#000', maxWidth: '100%' }} // Garante que ocupe a largura disponível
+                    style={{ border: '1px solid #000', backgroundColor: '#000', maxWidth: '100%' }}
                     onError={(e) => console.error('Erro no iframe:', e)}
-                    loading="eager" // Força carregamento imediato após conexão
+                    loading="eager"
                 >
                     <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
                 </iframe>
