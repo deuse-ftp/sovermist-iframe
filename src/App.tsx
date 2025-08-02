@@ -88,8 +88,8 @@ function App() {
             )}
             {isConnected && (
                 <div style={{ marginBottom: '20px' }}>
-                    <p style={{ color: '#fff' }}>Conectado como: {getLastSixChars(address)}</p> {/* Substitui a frase original */}
-                    <p style={{ color: '#fff', marginTop: '10px' }}>Se aparecer a mensagem 'Loading game for the first time...', aperte F5!</p> {/* Nova mensagem */}
+                    <p style={{ color: '#fff' }}>Connected: {getLastSixChars(address)}</p> {/* Substitui a frase original */}
+                    <p style={{ color: '#fff', marginTop: '10px' }}>If the message 'Loading game for the first time' appears, press F5!</p> {/* Nova mensagem */}
                     <button onClick={() => disconnect()} style={{ padding: '10px' }}>Desconectar</button>
                     {networkError && (
                         <div>
