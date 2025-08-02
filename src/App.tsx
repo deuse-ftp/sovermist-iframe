@@ -59,6 +59,11 @@ function App() {
         }
     };
 
+    // Extrai os 6 últimos caracteres do address
+    const getLastSixChars = (addr: string | undefined) => {
+        return addr ? `...${addr.slice(-6)}` : '...';
+    };
+
     return (
         <div style={{
             textAlign: 'center',
@@ -83,7 +88,8 @@ function App() {
             )}
             {isConnected && (
                 <div style={{ marginBottom: '20px' }}>
-                    <p style={{ color: '#fff' }}>Conectado como: {address}</p>
+                    <p style={{ color: '#fff' }}>Conectado como: {getLastSixChars(address)}</p> {/* Substitui a frase original */}
+                    <p style={{ color: '#fff', marginTop: '10px' }}>Se aparecer a mensagem 'Loading game for the first time...', aperte F5!</p> {/* Nova mensagem */}
                     <button onClick={() => disconnect()} style={{ padding: '10px' }}>Desconectar</button>
                     {networkError && (
                         <div>
@@ -97,7 +103,6 @@ function App() {
                     )}
                 </div>
             )}
-
             {isConnected && !networkError && (
                 <iframe
                     frameBorder="0"
@@ -114,5 +119,4 @@ function App() {
         </div>
     );
 }
-
 export default App;
