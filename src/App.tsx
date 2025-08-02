@@ -1,6 +1,7 @@
 import { useAccount, useDisconnect, useSwitchChain, useWalletClient, useChainId } from 'wagmi';
 import { useEffect, useState } from 'react';
 import { monadTestnet } from './config';
+
 function App() {
     const { address, isConnected, isConnecting } = useAccount();
     const { disconnect } = useDisconnect();
@@ -9,6 +10,7 @@ function App() {
     const chainId = useChainId(); // Mantido com uso explícito
     const [networkError, setNetworkError] = useState<string | null>(null);
     const [isChainAdded, setIsChainAdded] = useState(true);
+
     // Força fundo preto na tela toda
     useEffect(() => {
         document.body.style.backgroundColor = '#000 !important';
@@ -21,6 +23,7 @@ function App() {
         document.body.style.alignItems = 'center';
         console.log('Chain ID atual:', chainId); // Usa chainId para resolver TS6133
     }, [chainId]);
+
     const addNetwork = async () => {
         if (walletClient) {
             try {
@@ -55,6 +58,7 @@ function App() {
             }
         }
     };
+
     return (
         <div style={{
             textAlign: 'center',
@@ -93,10 +97,11 @@ function App() {
                     )}
                 </div>
             )}
+
             {isConnected && !networkError && (
                 <iframe
                     frameBorder="0"
-                    src="https://itch.io/embed-upload/14489424?color=333333"
+                    src="https://itch.io/embed-upload/14490082?color=333333"
                     allowFullScreen
                     width="1280"
                     height="740"
@@ -109,4 +114,5 @@ function App() {
         </div>
     );
 }
+
 export default App;
