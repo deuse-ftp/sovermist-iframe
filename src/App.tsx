@@ -106,15 +106,13 @@ function App() {
             {isConnected && !networkError && (
                 <iframe
                     frameBorder="0"
-                    src="https://itch.io/embed-upload/14561316?color=333333"
+                    src="/game/index.html"
                     allowFullScreen
                     width="1280"
                     height="740"
                     style={{ border: '1px solid #000', backgroundColor: '#000' }}
                     onError={(e) => console.error('Erro no iframe:', e)}
-                >
-                    <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
-                </iframe>
+                />
             )}
         </div>
     );
