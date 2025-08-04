@@ -1,25 +1,22 @@
 {
-  "headers": [
-    {
-      "source": "/(.*\\.wasm)",
-      "headers": [
-        { "key": "Content-Type", "value": "application/wasm" },
-        { "key": "Content-Encoding", "value": "br" },
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/(.*\\.data|.*\\.js|.*\\.png|.*\\.jpg|.*\\.html|.*\\.json)",
-      "headers": [
-        { "key": "Content-Encoding", "value": "br" },
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "Content-Security-Policy", "value": "frame-src 'self' https://itch.io https://*.itch.io; script-src 'self' 'unsafe-inline' https://*.itch.io; worker-src 'self' blob:; connect-src 'self' https://*.itch.io wss://*.itch.io;" }
-      ]
-    }
-  ]
+    "headers": [
+        {
+            "source": "/(.*)\\.br",
+            "headers": [
+                {
+                    "key": "Content-Encoding",
+                    "value": "br"
+                }
+            ]
+        },
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "Content-Security-Policy",
+                    "value": "frame-src 'self' https://itch.io https://*.itch.io; script-src 'self' 'unsafe-inline' https://*.itch.io; worker-src 'self' blob:; connect-src 'self' https://*.itch.io wss://*.itch.io;"
+                }
+            ]
+        }
+    ]
 }
