@@ -1,115 +1,99 @@
 <!DOCTYPE html>
 <html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | Sovermist</title>
+    <link rel="shortcut icon" href="TemplateData/favicon.ico">
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="unity-webview.js"></script>
+  </head>
+  <body>
+    <div id="unity-container" class="unity-desktop">
+      <canvas id="unity-canvas"></canvas>
+      <div id="unity-loading-bar">
+        <div id="unity-logo"></div>
+        <div id="unity-progress-bar-empty">
+          <div id="unity-progress-bar-full"></div>
+        </div>
+      </div>
+      <div id="unity-footer">
+        <div id="unity-webgl-logo"></div>
+        <div id="unity-fullscreen-button"></div>
+        <div id="unity-build-title">Sovermist</div>
+      </div>
+    </div>
+    <script>
+      var buildUrl = "Build";
+      var loaderUrl = buildUrl + "/Sovermist.loader.js";
+      var config = {
+        dataUrl: buildUrl + "/Sovermist.data",
+        frameworkUrl: buildUrl + "/Sovermist.framework.js",
+        codeUrl: buildUrl + "/Sovermist.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "Sovermist",
+        productVersion: "1.0",
+      };
 
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>Sovermist</title>
-	<style>
-		html,
-		body {
-			background: #000000;
-			width: 100%;
-			height: 100%;
-			overflow: visible;
-			padding: 0;
-			margin: 0;
-		}
+      var container = document.querySelector("#unity-container");
+      var canvas = document.querySelector("#unity-canvas");
+      var loadingBar = document.querySelector("#unity-loading-bar");
+      var progressBarFull = document.querySelector("#unity-progress-bar-full");
+      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+      var width0 = "1280px";
+      var height0 = "720px";
 
-		div#gameContainer {
-			background: transparent !important;
-			position: absolute;
-		}
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        container.className = "unity-mobile";
+        config.devicePixelRatio = 1;
+      } else {
+        canvas.style.width = "1280px";
+        canvas.style.height = "720px";
+      }
+      loadingBar.style.display = "block";
 
-		div#gameContainer canvas {
-			position: absolute;
-			-webkit-user-select: none;
-			user-select: none;
-		}
-
-		div#gameContainer canvas[data-pixel-art="true"] {
-			position: absolute;
-			image-rendering: optimizeSpeed;
-			image-rendering: -webkit-crisp-edges;
-			image-rendering: -moz-crisp-edges;
-			image-rendering: -o-crisp-edges;
-			image-rendering: crisp-edges;
-			image-rendering: -webkit-optimize-contrast;
-			image-rendering: optimize-contrast;
-			image-rendering: pixelated;
-			-ms-interpolation-mode: nearest-neighbor;
-		}
-	</style>
-</head>
-
-<body>
-	<div id="gameContainer">
-		<canvas id="unity-canvas" width="1280" height="720" data-pixel-art=""></canvas>
-		<script src="Build/Sovermist.loader.js"></script>
-		<script>
-			var canvas = document.querySelector("#unity-canvas");
-			var config = {
-				dataUrl: "Build/Sovermist.data",
-				frameworkUrl: "Build/Sovermist.framework.js",
-				codeUrl: "Build/Sovermist.wasm",
-				streamingAssetsUrl: "StreamingAssets",
-				companyName: "DefaultCompany",
-				productName: "Sovermist",
-				productVersion: "1.0",
-				autoSyncPersistentDataPath: true,
-			};
-			var scaleToFit;
-			try {
-				scaleToFit = !!JSON.parse("true");
-			} catch (e) {
-				scaleToFit = true;
-			}
-			function progressHandler(progress) {
-				var percent = progress * 100 + '%';
-				canvas.style.background = 'linear-gradient(to right, white, white ' + percent + ', transparent ' + percent + ', transparent) no-repeat center';
-				canvas.style.backgroundSize = '100% 1rem';
-			}
-			function onResize() {
-				var container = canvas.parentElement;
-				var w;
-				var h;
-
-				if (scaleToFit) {
-					w = window.innerWidth;
-					h = window.innerHeight;
-
-					var r = 720 / 1280;
-
-					if (w * r > window.innerHeight) {
-						w = Math.min(w, Math.ceil(h / r));
-					}
-					h = Math.floor(w * r);
-				} else {
-					w = 1280;
-					h = 720;
-				}
-
-				container.style.width = canvas.style.width = w + "px";
-				container.style.height = canvas.style.height = h + "px";
-				container.style.top = Math.floor((window.innerHeight - h) / 2) + "px";
-				container.style.left = Math.floor((window.innerWidth - w) / 2) + "px";
-			}
-			createUnityInstance(canvas, config, progressHandler).then(function (instance) {
-				canvas = instance.Module.canvas;
-				onResize();
-			});
-			window.addEventListener('resize', onResize);
-			onResize();
-
-			if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-				// Mobile device style: fill the whole browser client area with the game canvas:
-				const meta = document.createElement('meta');
-				meta.name = 'viewport';
-				meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-				document.getElementsByTagName('head')[0].appendChild(meta);
-			}
-		</script>
-	</div>
-</body>
-
+      document.addEventListener(
+        'fullscreenchange',
+        function() {
+          var p = document.getElementById('unity-container');
+          var c = document.getElementById('unity-canvas');
+          if (document.fullscreenElement) {
+            width0 = c.style.width;
+            height0 = c.style.height;
+            setTimeout(
+              function() {
+                c.style.width = getComputedStyle(p).width;
+                c.style.height = getComputedStyle(p).height;
+              },
+              250);
+          } else {
+            c.style.width = width0;
+            c.style.height = height0;
+          }
+        });
+      var script = document.createElement("script");
+      script.src = loaderUrl;
+      script.onload = () => {
+        createUnityInstance(canvas, config, (progress) => {
+          progressBarFull.style.width = 100 * progress + "%";
+        }).then((unityInstance) => {
+          window.unityInstance = unityInstance;
+          loadingBar.style.display = "none";
+          fullscreenButton.onclick = () => {
+            var p = document.getElementById('unity-container');
+            var c = document.getElementById('unity-canvas');
+            c.requestFullscreen = () => {
+              p.requestFullscreen();
+            };
+            document.makeFullscreen('unity-container');
+          };
+        }).catch((message) => {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
 </html>
