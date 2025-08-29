@@ -10,7 +10,8 @@ declare global {
 
 function App() {
   const { login } = useLogin({
-    onComplete: ({ user, _isNewUser, _wasAlreadyAuthenticated, loginMethod, _loginAccount }: { user: User; isNewUser: boolean; wasAlreadyAuthenticated: boolean; loginMethod: string | null; loginAccount: LinkedAccountWithMetadata | null }) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onComplete: ({ user, isNewUser, wasAlreadyAuthenticated, loginMethod, loginAccount }: { user: User; isNewUser: boolean; wasAlreadyAuthenticated: boolean; loginMethod: string | null; loginAccount: LinkedAccountWithMetadata | null }) => {
       console.log('✅ User logged in:', user, 'Method:', loginMethod);
       window.dispatchEvent(new Event('walletConnected'));
       window.privyUser = user;
