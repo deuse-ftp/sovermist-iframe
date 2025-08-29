@@ -1,17 +1,15 @@
 import { useLogin, usePrivy, User, LinkedAccountWithMetadata } from '@privy-io/react-auth';
 import { useEffect, useState } from 'react';
-
 // Declare global pro window.privyUser (pra TS não reclamar)
 declare global {
   interface Window {
     privyUser: User | undefined;
   }
 }
-
 function App() {
   const { login } = useLogin({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onComplete: ({ user, isNewUser, wasAlreadyAuthenticated, loginMethod, loginAccount }: { user: User; isNewUser: boolean; wasAlreadyAuthenticated: boolean; loginMethod: string | null; loginAccount: LinkedAccountWithMetadata | null }) => {
+    onComplete: ({ user, loginMethod }: { user: User; isNewUser: boolean; wasAlreadyAuthenticated: boolean; loginMethod: string | null; loginAccount: LinkedAccountWithMetadata | null }) => {
       console.log('✅ User logged in:', user, 'Method:', loginMethod);
       window.dispatchEvent(new Event('walletConnected'));
       window.privyUser = user;
@@ -26,8 +24,6 @@ function App() {
     },
   });
   const { authenticated, ready, logout, user } = usePrivy();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [walletAddress, setWalletAddress] = useState(''); // Usado no fetchUsername
   const [username, setUsername] = useState('');
   const [loadingUsername, setLoadingUsername] = useState(false);
   const [usernamesMap, setUsernamesMap] = useState(new Map<string, string>());
@@ -35,7 +31,6 @@ function App() {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
   // Força fundo preto na tela toda
   useEffect(() => {
     document.body.style.backgroundColor = '#000 !important';
@@ -49,7 +44,6 @@ function App() {
     document.body.style.color = '#fff';
     document.body.style.fontFamily = 'Arial, sans-serif';
   }, []);
-
   // Pega o endereço do embedded wallet diretamente
   useEffect(() => {
     if (authenticated && user && user.linkedAccounts.length > 0) {
@@ -59,7 +53,6 @@ function App() {
       ) as LinkedAccountWithMetadata & { embeddedWallets: { address: string }[] };
       if (crossAppAccount && crossAppAccount.embeddedWallets.length > 0) {
         const address = crossAppAccount.embeddedWallets[0].address;
-        setWalletAddress(address);
         console.log('✅ Endereço embedded encontrado:', address);
         fetchUsername(address);
       } else {
@@ -67,7 +60,6 @@ function App() {
       }
     }
   }, [authenticated, user]);
-
   const fetchUsername = async (walletAddress: string) => {
     if (!walletAddress) {
       console.warn('❌ No wallet address provided for fetchUsername');
@@ -107,7 +99,6 @@ function App() {
       setLoadingUsername(false);
     }
   };
-
   // Poll o backend a cada 5s pra atualizar leaderboard
   useEffect(() => {
     if (authenticated) {
@@ -116,7 +107,6 @@ function App() {
       return () => clearInterval(interval);
     }
   }, [authenticated]);
-
   const fetchLeaderboard = async () => {
     try {
       const response = await fetch('https://backend-leaderboard.vercel.app/leaderboard');
@@ -127,10 +117,8 @@ function App() {
       console.error('❌ Erro ao fetch leaderboard:', error);
     }
   };
-
   const pageCount = Math.ceil(leaderboard.length / itemsPerPage);
   const currentData = leaderboard.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
   return (
     <div style={{ textAlign: 'center', maxWidth: '1280px', margin: '0 auto' }}>
       {!ready ? (
@@ -197,7 +185,7 @@ function App() {
           <p>If the message ''Loading game for the first time'' appears, press F5 and please wait</p>
           <iframe
             frameBorder="0"
-            src="https://itch.io/embed-upload/14806081?color=333333"
+            src="https://itch.io/embed-upload/14561316?color=333333"
             allowFullScreen
             width="1280"
             height="760"
@@ -269,5 +257,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
