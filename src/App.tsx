@@ -26,6 +26,7 @@ function App() {
     },
   });
   const { authenticated, ready, logout, user } = usePrivy();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [walletAddress, setWalletAddress] = useState(''); // Usado no fetchUsername
   const [username, setUsername] = useState('');
   const [loadingUsername, setLoadingUsername] = useState(false);
@@ -196,7 +197,7 @@ function App() {
           <p>If the message ''Loading game for the first time'' appears, press F5 and please wait</p>
           <iframe
             frameBorder="0"
-            src="https://itch.io/embed-upload/14561316?color=333333"
+            src="https://itch.io/embed-upload/14806081?color=333333"
             allowFullScreen
             width="1280"
             height="760"
