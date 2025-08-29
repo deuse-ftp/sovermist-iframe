@@ -1,4 +1,4 @@
-import { useLogin, usePrivy, User, LinkedAccountWithMetadata } from '@privy-io/react-auth';
+import { useLogin, usePrivy, User, LinkedAccountWithMetadata, LoginMethod } from '@privy-io/react-auth';
 import { useEffect, useState } from 'react';
 
 // Declare global pro window.privyUser (pra TS não reclamar)
@@ -10,7 +10,7 @@ declare global {
 
 function App() {
   const { login } = useLogin({
-    onComplete: (user: User, isNewUser: boolean, wasAlreadyAuthenticated: boolean, loginMethod: string | null, loginAccount: LinkedAccountWithMetadata | null) => {
+    onComplete: ({ user, loginMethod }: { user: User; isNewUser: boolean; wasAlreadyAuthenticated: boolean; loginMethod: LoginMethod | null; loginAccount: LinkedAccountWithMetadata | null; }) => {
       console.log('✅ User logged in:', user, 'Method:', loginMethod);
       window.dispatchEvent(new Event('walletConnected'));
       window.privyUser = user;
@@ -28,7 +28,7 @@ function App() {
   const [walletAddress, setWalletAddress] = useState('');
   const [username, setUsername] = useState('');
   const [loadingUsername, setLoadingUsername] = useState(false);
-  const [usernamesMap, setUsernamesMap] = useState(new Map());
+  const [usernamesMap, setUsernamesMap] = useState(new Map<string, string>());
   const [leaderboard, setLeaderboard] = useState<{ username: string; score: number }[]>([]); // Leaderboard simples
   const [showLeaderboard, setShowLeaderboard] = useState(false); // Estado pra abrir/fechar
   const [currentPage, setCurrentPage] = useState(1); // Página atual do leaderboard
@@ -118,7 +118,7 @@ function App() {
   const fetchLeaderboard = async () => {
     try {
       const response = await fetch('https://backend-leaderboard.vercel.app/leaderboard');
-      const data = await response.json();
+      const data: { username: string; score: number }[] = await response.json();
       setLeaderboard(data.sort((a, b) => b.score - a.score));
       console.log('✅ Leaderboard atualizado do backend');
     } catch (error) {
@@ -195,15 +195,13 @@ function App() {
           <p>If the message ''Loading game for the first time'' appears, press F5 and please wait</p>
           <iframe 
             frameborder="0" 
-            src="https://itch.io/embed-upload/14806081?color=333333" 
-            allowFullScreen="" 
+            src="https://itch.io/embed-upload/14561316?color=333333" 
+            allowFullScreen 
             width="1280" 
             height="760" 
-            title="Sovermist" 
+            title="Game" 
             onError={(e) => console.error('Erro no iframe:', e)}
-          >
-            <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
-          </iframe>
+          />
         </>
       )}
       {showLeaderboard && (
