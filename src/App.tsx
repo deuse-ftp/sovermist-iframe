@@ -10,7 +10,7 @@ declare global {
 
 function App() {
   const { login } = useLogin({
-    onComplete: ({ user, isNewUser, wasAlreadyAuthenticated, loginMethod, loginAccount }: { user: User; isNewUser: boolean; wasAlreadyAuthenticated: boolean; loginMethod: string | null; loginAccount: LinkedAccountWithMetadata | null }) => {
+    onComplete: ({ user, _isNewUser, _wasAlreadyAuthenticated, loginMethod, _loginAccount }: { user: User; isNewUser: boolean; wasAlreadyAuthenticated: boolean; loginMethod: string | null; loginAccount: LinkedAccountWithMetadata | null }) => {
       console.log('✅ User logged in:', user, 'Method:', loginMethod);
       window.dispatchEvent(new Event('walletConnected'));
       window.privyUser = user;
@@ -25,7 +25,7 @@ function App() {
     },
   });
   const { authenticated, ready, logout, user } = usePrivy();
-  const [walletAddress, setWalletAddress] = useState('');
+  const [walletAddress, setWalletAddress] = useState(''); // Usado no fetchUsername
   const [username, setUsername] = useState('');
   const [loadingUsername, setLoadingUsername] = useState(false);
   const [usernamesMap, setUsernamesMap] = useState(new Map<string, string>());
@@ -109,8 +109,8 @@ function App() {
   // Poll o backend a cada 5s pra atualizar leaderboard
   useEffect(() => {
     if (authenticated) {
-      fetchLeaderboard(); // Atualiza imediato
-      const interval = setInterval(fetchLeaderboard, 5000); // Poll a cada 5s
+      fetchLeaderboard();
+      const interval = setInterval(fetchLeaderboard, 5000);
       return () => clearInterval(interval);
     }
   }, [authenticated]);
