@@ -1,43 +1,66 @@
-import { createAppKit } from '@reown/appkit/react';
-import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
+import { createPublicClient, http } from 'viem';
 
-// Defini��o da rede Monad Testnet
+// Definição da rede Monad Testnet
 export const monadTestnet = {
-    id: 10143,
-    name: 'Monad Testnet',
-    nativeCurrency: { name: 'Monad', symbol: 'MON', decimals: 18 },
-    rpcUrls: {
-        default: { http: ['https://monad-testnet.g.alchemy.com/v2/dkEUofCC_DkGE0hb1qfcLosQeneQWmLc'] },
-        public: { http: ['https://testnet-rpc.monad.xyz'] },
-    },
-    blockExplorers: {
-        default: { name: 'Monad Explorer', url: 'https://testnet.monadexplorer.com' },
-    },
-    testnet: true,
+  id: 10143,
+  name: 'Monad Testnet',
+  nativeCurrency: { name: 'Monad', symbol: 'MON', decimals: 18 },
+  rpcUrls: {
+    default: { http: ['https://monad-testnet.g.alchemy.com/v2/dkEUofCC_DkGE0hb1qfcLosQeneQWmLc'] },
+    public: { http: ['https://testnet-rpc.monad.xyz'] },
+  },
+  blockExplorers: {
+    default: { name: 'Monad Explorer', url: 'https://testnet.monadexplorer.com' },
+  },
+  testnet: true,
 };
 
-// Crie o adaptador Wagmi
-const wagmiAdapter = new WagmiAdapter({
-    networks: [monadTestnet],
-    projectId: '81bbd6d3324b1f34b5e1d6002aececc0',
+// Cliente público para viem (usado para reads e watches)
+export const publicClient = createPublicClient({
+  chain: monadTestnet,
+  transport: http(monadTestnet.rpcUrls.default.http[0]),
 });
 
-// Crie o AppKit com metadata.url corrigida para Vercel
-createAppKit({
-    adapters: [wagmiAdapter],
-    networks: [monadTestnet],
-    projectId: '81bbd6d3324b1f34b5e1d6002aececc0',
-    metadata: {
-        name: 'Sovermist',
-        description: 'Jogo Web3 com Monad Testnet',
-        url: 'https://sovermist-iframe-ra2xyxhp8-deuses-projects-4f000c64.vercel.app', // Mude para a URL real do seu Vercel
-        icons: ['https://avatars.githubusercontent.com/u/179229932'],
-    },
-    features: {
-        analytics: false, // Desativa para evitar 401 do Coinbase
-    },
-    themeMode: 'dark',
-});
+// Endereço do contrato (placeholder - substitua pelo real)
+export const contractAddress = '0xYourContractAddressHere';
 
-// Exporte o wagmiConfig
-export const wagmiConfig = wagmiAdapter.wagmiConfig;
+// ABI do contrato (placeholder - substitua pelo ABI real do seu contrato)
+export const contractABI = [
+  // Exemplo de ABI - adicione o real aqui
+  {
+    "type": "function",
+    "name": "getLeaderboard",
+    "inputs": [],
+    "outputs": [{"name": "", "type": "tuple[]", "components": [{"name": "player", "type": "address"}, {"name": "score", "type": "uint256"}, {"name": "username", "type": "string"}]}],
+  },
+  {
+    "type": "function",
+    "name": "getPlayerRank",
+    "inputs": [{"name": "player", "type": "address"}],
+    "outputs": [{"name": "rank", "type": "uint256"}, {"name": "score", "type": "uint256"}],
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [{"name": "", "type": "address"}],
+  },
+  // Eventos
+  {
+    "type": "event",
+    "name": "LeaderboardUpdated",
+    "inputs": [{"name": "player", "type": "address", "indexed": true}, {"name": "score", "type": "uint256", "indexed": false}],
+  },
+  {
+    "type": "event",
+    "name": "LeaderboardReset",
+    "inputs": [],
+  },
+  // Adicione mais funções/eventos conforme necessário
+];
+
+// Endereço dev (placeholder - substitua pelo real)
+export const DEV_ADDRESS = '0xYourDevAddressHere';
+
+// URL do backend (placeholder - substitua pelo real)
+export const BACKEND_URL = 'https://backend-leaderboard.vercel.app';
