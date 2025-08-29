@@ -1,4 +1,4 @@
-import { useLogin, usePrivy, User, LinkedAccountWithMetadata, LoginMethod } from '@privy-io/react-auth';
+import { useLogin, usePrivy, User, LinkedAccountWithMetadata } from '@privy-io/react-auth';
 import { useEffect, useState } from 'react';
 
 // Declare global pro window.privyUser (pra TS não reclamar)
@@ -10,7 +10,7 @@ declare global {
 
 function App() {
   const { login } = useLogin({
-    onComplete: ({ user, loginMethod }: { user: User; isNewUser: boolean; wasAlreadyAuthenticated: boolean; loginMethod: LoginMethod | null; loginAccount: LinkedAccountWithMetadata | null; }) => {
+    onComplete: ({ user, isNewUser, wasAlreadyAuthenticated, loginMethod, loginAccount }: { user: User; isNewUser: boolean; wasAlreadyAuthenticated: boolean; loginMethod: string | null; loginAccount: LinkedAccountWithMetadata | null }) => {
       console.log('✅ User logged in:', user, 'Method:', loginMethod);
       window.dispatchEvent(new Event('walletConnected'));
       window.privyUser = user;
@@ -29,10 +29,10 @@ function App() {
   const [username, setUsername] = useState('');
   const [loadingUsername, setLoadingUsername] = useState(false);
   const [usernamesMap, setUsernamesMap] = useState(new Map<string, string>());
-  const [leaderboard, setLeaderboard] = useState<{ username: string; score: number }[]>([]); // Leaderboard simples
-  const [showLeaderboard, setShowLeaderboard] = useState(false); // Estado pra abrir/fechar
-  const [currentPage, setCurrentPage] = useState(1); // Página atual do leaderboard
-  const itemsPerPage = 10; // 10 por página
+  const [leaderboard, setLeaderboard] = useState<{ username: string; score: number }[]>([]);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Força fundo preto na tela toda
   useEffect(() => {
@@ -48,13 +48,13 @@ function App() {
     document.body.style.fontFamily = 'Arial, sans-serif';
   }, []);
 
-  // Pega o endereço do embedded wallet diretamente (com cast pro TS aceitar embeddedWallets)
+  // Pega o endereço do embedded wallet diretamente
   useEffect(() => {
     if (authenticated && user && user.linkedAccounts.length > 0) {
-      console.log('User object:', user); // Debug: Veja o user completo
+      console.log('User object:', user);
       const crossAppAccount = user.linkedAccounts.find(
         (account: LinkedAccountWithMetadata) => account.type === 'cross_app' && account.providerApp.id === 'cmd8euall0037le0my79qpz42'
-      ) as LinkedAccountWithMetadata & { embeddedWallets: { address: string }[] }; // Cast pra embeddedWallets
+      ) as LinkedAccountWithMetadata & { embeddedWallets: { address: string }[] };
       if (crossAppAccount && crossAppAccount.embeddedWallets.length > 0) {
         const address = crossAppAccount.embeddedWallets[0].address;
         setWalletAddress(address);
@@ -73,7 +73,7 @@ function App() {
       return 'Unknown';
     }
     if (usernamesMap.has(walletAddress)) {
-      const cachedUsername = usernamesMap.get(walletAddress);
+      const cachedUsername = usernamesMap.get(walletAddress) || 'Unknown';
       console.log('✅ Using cached username:', cachedUsername);
       setUsername(cachedUsername);
       return cachedUsername;
@@ -119,15 +119,15 @@ function App() {
     try {
       const response = await fetch('https://backend-leaderboard.vercel.app/leaderboard');
       const data: { username: string; score: number }[] = await response.json();
-      setLeaderboard(data.sort((a, b) => b.score - a.score));
+      setLeaderboard(data.sort((a: { username: string; score: number }, b: { username: string; score: number }) => b.score - a.score));
       console.log('✅ Leaderboard atualizado do backend');
     } catch (error) {
       console.error('❌ Erro ao fetch leaderboard:', error);
     }
   };
 
-  const pageCount = Math.ceil(leaderboard.length / itemsPerPage); // Total de páginas
-  const currentData = leaderboard.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); // Dados da página atual
+  const pageCount = Math.ceil(leaderboard.length / itemsPerPage);
+  const currentData = leaderboard.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div style={{ textAlign: 'center', maxWidth: '1280px', margin: '0 auto' }}>
@@ -193,15 +193,17 @@ function App() {
       {authenticated && (
         <>
           <p>If the message ''Loading game for the first time'' appears, press F5 and please wait</p>
-          <iframe 
-            frameborder="0" 
-            src="https://itch.io/embed-upload/14561316?color=333333" 
-            allowFullScreen 
-            width="1280" 
-            height="760" 
-            title="Game" 
+          <iframe
+            frameBorder="0"
+            src="https://itch.io/embed-upload/14561316?color=333333"
+            allowFullScreen
+            width="1280"
+            height="760"
+            title="Game"
             onError={(e) => console.error('Erro no iframe:', e)}
-          />
+          >
+            <a href="https://deuseftp.itch.io/sovermist">Play Sovermist on itch.io</a>
+          </iframe>
         </>
       )}
       {showLeaderboard && (
