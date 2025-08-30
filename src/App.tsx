@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 declare global {
   interface Window {
     privyUser: User | undefined;
+    username: string; // Novo: Expor username pro Unity iframe
   }
 }
 function App() {
@@ -60,6 +61,13 @@ function App() {
       }
     }
   }, [authenticated, user]);
+  // Novo: Expor username no window após fetch
+  useEffect(() => {
+    if (username && username !== 'Unknown') {
+      window.username = username;
+      console.log('✅ Username exposto no window:', window.username);
+    }
+  }, [username]);
   const fetchUsername = async (walletAddress: string) => {
     if (!walletAddress) {
       console.warn('❌ No wallet address provided for fetchUsername');
@@ -185,7 +193,7 @@ function App() {
           <p>If the message ''Loading game for the first time'' appears, press F5 and please wait</p>
           <iframe
             frameBorder="0"
-            src="https://itch.io/embed-upload/14808672?color=333333"
+            src="https://itch.io/embed-upload/14808771?color=333333"
             allowFullScreen
             width="1280"
             height="760"
