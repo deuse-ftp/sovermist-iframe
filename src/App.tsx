@@ -68,6 +68,17 @@ function App() {
       console.log('✅ Username exposto no window:', window.username);
     }
   }, [username]);
+  // Novo: Listener para postMessage do iframe (Unity)
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === "request_username") {
+        console.log('Received request for username from iframe');
+        event.source?.postMessage({ type: "response_username", username: window.username || 'Unknown' }, { targetOrigin: event.origin });
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
   const fetchUsername = async (walletAddress: string) => {
     if (!walletAddress) {
       console.warn('❌ No wallet address provided for fetchUsername');
@@ -193,7 +204,7 @@ function App() {
           <p>If the message ''Loading game for the first time'' appears, press F5 and please wait</p>
           <iframe
             frameBorder="0"
-            src="https://itch.io/embed-upload/14809016?color=333333"
+            src="https://itch.io/embed-upload/14809571?color=333333"
             allowFullScreen
             width="1280"
             height="760"
